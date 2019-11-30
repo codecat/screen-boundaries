@@ -38,6 +38,7 @@ namespace ScreenBoundaries
 				m_firstStartup = true;
 				foreach (var arg in Environment.GetCommandLineArgs()) {
 					if (arg == "/startup") {
+						Logger.Info("Hiding window on Windows startup");
 						Hide();
 					}
 				}
