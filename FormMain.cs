@@ -1,14 +1,7 @@
 ﻿using Microsoft.Win32;
 using ScreenBoundaries.Properties;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ScreenBoundaries
@@ -62,9 +55,11 @@ namespace ScreenBoundaries
 			Settings.Default.SafeArea = (int)numSafeArea.Value;
 			Settings.Default.Save();
 
+			var runRegKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
 			if (checkStartWithWindows.Checked) {
-				var runRegKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
 				runRegKey.SetValue("NimbleScreenBoundaries", "\"" + Application.ExecutablePath + "\" /startup");
+			} else {
+				runRegKey.DeleteValue("NimbleScreenBoundaries", false);
 			}
 		}
 
