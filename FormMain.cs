@@ -8,6 +8,8 @@ namespace ScreenBoundaries
 {
 	public partial class FormMain : Form
 	{
+		private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
 		private NotifyIcon m_tray;
 
 		private bool m_firstStartup;
@@ -16,6 +18,8 @@ namespace ScreenBoundaries
 		public FormMain()
 		{
 			InitializeComponent();
+
+			Logger.Info("Initializing");
 
 			m_tray = new NotifyIcon();
 			m_tray.Icon = Icon;
@@ -44,6 +48,8 @@ namespace ScreenBoundaries
 
 		void LoadSettings()
 		{
+			Logger.Info("Loading settings");
+
 			numSafeArea.Value = Settings.Default.SafeArea;
 
 			var runRegKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
@@ -52,6 +58,8 @@ namespace ScreenBoundaries
 
 		void SaveSettings()
 		{
+			Logger.Info("Saving settings");
+
 			Settings.Default.SafeArea = (int)numSafeArea.Value;
 			Settings.Default.Save();
 
@@ -66,6 +74,8 @@ namespace ScreenBoundaries
 		protected override void OnHandleCreated(EventArgs e)
 		{
 			base.OnHandleCreated(e);
+
+			Logger.Debug("Creating message filter");
 
 			Application.AddMessageFilter(new MouseFlicker(Handle));
 		}
@@ -89,12 +99,15 @@ namespace ScreenBoundaries
 
 		private void buttonQuit_Click(object sender, EventArgs e)
 		{
+			SaveSettings();
+
 			m_tray.Visible = false;
 			m_tray.Dispose();
 			m_tray = null;
 
 			m_quit = true;
 
+			Logger.Info("Quitting");
 			Close();
 		}
 	}

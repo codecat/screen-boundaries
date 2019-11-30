@@ -12,6 +12,8 @@ namespace ScreenBoundaries
 {
 	public class MouseFlicker : IMessageFilter
 	{
+		private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
 		private struct ScreenPair
 		{
 			public Rectangle m_realBounds;
@@ -29,18 +31,23 @@ namespace ScreenBoundaries
 			devices[0].WindowHandle = handle;
 
 			if (!Native.RegisterRawInputDevices(devices, devices.Length, Marshal.SizeOf(devices[0]))) {
-				Console.WriteLine("Failed to register raw input device");
+				Logger.Error("Failed to register raw input device");
 			} else {
-				Console.WriteLine("Raw input device registered");
+				Logger.Info("Raw input device registered");
 			}
 
 			UpdateScreens();
 
-			SystemEvents.DisplaySettingsChanged += (o, e) => UpdateScreens();
+			SystemEvents.DisplaySettingsChanged += (o, e) => {
+				Logger.Warn("Display settings changed");
+				UpdateScreens();
+			};
 		}
 
 		void UpdateScreens()
 		{
+			Logger.Info("Updating screens");
+
 			m_screens.Clear();
 
 			var screens = Screen.AllScreens.OrderBy(s => s.Bounds.X).ToArray();
@@ -55,14 +62,14 @@ namespace ScreenBoundaries
 
 				float dpiScale = dm.dmPelsHeight / (float)screen.Bounds.Height;
 
-				Console.WriteLine("Screen {0}, \"{1}\", {5} x {6} -> {2} x {3} (@ {4}):", i, screen.DeviceName, screen.Bounds.Width, screen.Bounds.Height, dpiScale, screen.Bounds.X / dpiScale, screen.Bounds.Y / dpiScale);
+				Logger.Debug("Screen {0}, \"{1}\", {5} x {6} -> {2} x {3} (@ {4}):", i, screen.DeviceName, screen.Bounds.Width, screen.Bounds.Height, dpiScale, screen.Bounds.X / dpiScale, screen.Bounds.Y / dpiScale);
 
 				if (prevScreen != null && screen.Bounds.Height > prevScreen.Bounds.Height) {
-					Console.WriteLine("  Screen height {0} bigger than left screen height {1}", screen.Bounds.Height, prevScreen.Bounds.Height);
+					Logger.Debug("  Screen height {0} bigger than left screen height {1}", screen.Bounds.Height, prevScreen.Bounds.Height);
 				}
 
 				if (nextScreen != null && screen.Bounds.Height > nextScreen.Bounds.Height) {
-					Console.WriteLine("  Screen height {0} bigger than right screen height {1}", screen.Bounds.Height, nextScreen.Bounds.Height);
+					Logger.Debug("  Screen height {0} bigger than right screen height {1}", screen.Bounds.Height, nextScreen.Bounds.Height);
 				}
 
 				m_screens.Add(new ScreenPair() {
@@ -144,7 +151,7 @@ namespace ScreenBoundaries
 
 				Cursor.Position = newPos;
 
-				Console.WriteLine("Trying to go off-screen from screen {0} to {1}, teleport to {2}, {3}!", screenIndex, newScreenIndex, newPos.X, newPos.Y);
+				Logger.Debug("Trying to go off-screen from {0} to {1}, teleport to {2}, {3}!", screenIndex, newScreenIndex, newPos.X, newPos.Y);
 			}
 
 			return false;
