@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29503.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScreenBoundaries", "ScreenBoundaries.csproj", "{1DACC375-8635-418B-B837-65576FBD38A4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1DACC375-8635-418B-B837-65576FBD38A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DACC375-8635-418B-B837-65576FBD38A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DACC375-8635-418B-B837-65576FBD38A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DACC375-8635-418B-B837-65576FBD38A4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {882A9745-1BC9-41B3-99A8-C8934B543667}
+	EndGlobalSection
+EndGlobal
